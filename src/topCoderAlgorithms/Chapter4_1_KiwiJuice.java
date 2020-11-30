@@ -31,29 +31,19 @@ public class Chapter4_1_KiwiJuice {
     }
 
     public static int[] thePouring(int[] capacities, int[] bottles, int[] fromId, int[] toId){
-        int[] returnArray = new int[capacities.length];
         //1. fromId 부터 toId까지 도는 for문을 만든다.
         //2. bottles[from[i]]를 확인하고, 옮겨질 양을 구하기 위해 capacities[toId[i]] - bottles[toId[i]]를 한다.
         //3. from[i]에는 그 양을 줄이고, toId[i]에는 기존에 값에 옮겨질 양을 더한다.
         //4. 반복한다.
 
         for(int i = 0; i<fromId.length; i++){
-            int fromSize = bottles[fromId[i]];
-            int toIdRemainSize = capacities[toId[i]] - bottles[toId[i]];
-            if(fromSize > toIdRemainSize){
-                returnArray[fromId[i]] = fromSize - toIdRemainSize;
-                returnArray[toId[i]] = bottles[toId[i]] + toIdRemainSize;
-                bottles[fromId[i]] -= toIdRemainSize;
-                bottles[toId[i]] += toIdRemainSize;
-            }else{
-                returnArray[fromId[i]] = 0;
-                returnArray[toId[i]] = bottles[toId[i]] + fromSize;
-                bottles[fromId[i]] -= fromSize;
-                bottles[toId[i]] += fromSize;
-            }
+            int f = fromId[i];
+            int t = toId[i];
+            int sum = bottles[f] + bottles[t];
+            bottles[t] = Math.min(sum, capacities[t]);
+            bottles[f] = sum - bottles[t];
         }
-
-        return returnArray;
+        return bottles;
     }
 
 }
